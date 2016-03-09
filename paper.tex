@@ -1,8 +1,8 @@
 \documentclass{easychair}
 \usepackage{microtype}
 
-\title{Specifying BYOD Policies With Logics Of Authorization}
-\titlerunning{Specifying BYOD Policies With Logics Of Authorization}
+\title{Specifying BYOD Policies with Authorization Logic}
+\titlerunning{Specifying BYOD Policies with Authorization Logic}
 \author{
   Joseph Hallett\inst{1}
   \and
@@ -31,21 +31,27 @@
   frame=single
 }
 
+\newcommand{\dotdotdot}[1]{$\[\cdots\]$}
+
 \begin{document}
 \maketitle
 
 \begin{abstract}
   % State problem
+  Corporate BYOD policies are imprecisely specified using natural language.
   % Why is it interesting
+  This creates ambiguity and makes detecting issues, and comparing policies harder.
   % What does my solution achieve
+  We show how AppPAL (an authorization logic for mobile app installation policies) can describe BYOD policies formally.
   % What follows from solution
+  This suggests that BYOD policies can be enforced automatically, and with greater precision, than by relying on users.
 \end{abstract}
 
 \section{Introduction}
 % Corporate policies are poorly specified
 % We have used an authorization to specify them and this is interesting
 
-Employees are increasingly bringing their own devices into their workplaces (called \emph{bring your own device} or BYOD schemes).
+Employees are increasingly bringing their own devices into their workplaces.
 This can present a challenge for corporate IT departments:
   they need to secure their networks and data but as they do not provide the employees with the devices they have limited control over what software runs and how the devices are configured.
 As a means of controlling the devices, IT departments have taken to publishing mobile device policies.
@@ -62,7 +68,7 @@ We present in Section~\ref{sec:translation} excerpts from the translation into A
 
 % TODO: We found that...
 
-\section{Translating Corporate Policies}
+\section{Translating Corporate BYOD Policies}
 \label{sec:translation}
 
 It is common to find rules in policies describing what apps can be used on devices.
@@ -112,12 +118,18 @@ If employees must use a handheld device while driving, ⟨Company⟩ requires th
   where inCar(Device) = true, isDriving(Owner) = true, isUsingHandsFree(Device) = false.
 \end{lstlisting}
 The similarity between the two rules is immediately apparent when specified in AppPAL: the SANS version has an additional constraint but they are otherwise identical.
-Other similarities appear when looking at how devices connect to networks.  The Edinburgh policy recommends disabling automatic access to open unsecured Wi-Fi networks:
-\begin{lstlisting}[title={\footnotesize\textbf{Edinburgh}:~\itshape ``Control your devices connections by disabling automatic connection to open, unsecured Wi-Fi networks''}]
+Other similarities appear when looking at how devices connect to networks.  The Edinburgh policy recommends disabling automatic access to open unsecured Wi-Fi networks, where as SANS says its okay if the access point is secured properly or a VPN is used:
+\begin{lstlisting}[title={\footnotesize\textbf{Edinburgh}:~\itshape ``Control your devices connections by disabling automatic connection to open, unsecured Wi-Fi networks.''}]
 'edinburgh-policy' says Device canConnectTo(AP) if AP isSecure.
 \end{lstlisting}
-
-Similarities between policies suggest that one could define a common schema of BYOD predicates, which would allow different policies to be compared and contrasted \emph{precisely} using standard terms.
+\begin{lstlisting}[title={\footnotesize\textbf{SANS}:~\itshape ``If mobile workers do require connectivity through public, open, or untrusted WLAN, then users MUST use WLANs using, if available and in this order: WPA(2) encryption, WEP 256 bits (or 128 bits), or finally open networks if nothing else is available. Users connected to data networks in an open environment MUST use a VPN connection.''}]
+'sans-policy' says Device canConnectTo(AP) if AP isSecure.
+'sans-policy' says AP isSecure if AP canUseWPA2.
+'sans-policy' says AP isSecure if AP canUseWEP256.
+'sans-policy' says AP isSecure if AP canUseWEP128.
+'sans-policy' says Device canConnectTo(AP) if Device hasVPN(VPN) where connect(VPN) = true.
+\end{lstlisting}
+Similarities between policies suggest that one could define a common schema of BYOD predicates, which would allow different policies to be compared \emph{precisely} using standard terms.
 
 \section{Conclusions}
 % Related work:
@@ -130,7 +142,34 @@ Similarities between policies suggest that one could define a common schema of B
 %   Formal specification helpful.
 
 
+We have shown...
+
 
 \bibliographystyle{plain}
-\bibliography{paper}
+\begin{thebibliography}{1}
+\bibitem{Becker:2006vh}
+M.Y. Becker, C~Fournet, and A~D Gordon.
+\newblock {SecPAL: Design and semantics of a decentralized authorization language}.
+\newblock {\em Computer Security Foundations}, 2006.
+
+\bibitem{Guerin:2008we}
+N.R.C. Gu{\'e}rin.
+\newblock {Security Policy for the use of handheld devices in corporate environments},
+\newblock {\em SANS}.%, 2008.
+
+\bibitem{Hallett:2016vu}
+J. Hallett and D. Aspinall.
+\newblock {AppPAL for Android}.
+\newblock {\em Engineeering Secure Software and Systems}, 2016.
+
+\bibitem{Kennington:2014tr}
+G. Kennington, et~al.
+\newblock {Mobile Devices Policy},
+\newblock {\em Torbay and Southern Devon Health Care NHS Trust}.%, 2014.
+
+\bibitem{Williamson:2015tr}
+D. Williamson, A. Grzybowski, and S. Graham.
+\newblock {BYOD Policy: Use of Personally Owned Devices for University Work},
+\newblock {\em University of Edinburgh}.%, 2015.
+\end{thebibliography}
 \end{document}
