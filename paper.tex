@@ -42,9 +42,9 @@
   % Why is it interesting
   This creates ambiguity, may hide specification problems and make comparison harder.
   % What does my solution achieve
-  We show how AppPAL (an authorization logic) can be used to formalise BYOD policies.
+  We show how we can use AppPAL (an authorization logic) to formalise BYOD policies.
   % What follows from solution
-  This suggests that the policies could be enforced automatically with greater precision than by relying on users.
+  This suggests we can automatically enforce policies with fewer mistakes than by relying on users.
 \end{abstract}
 
 \section{Introduction}
@@ -52,16 +52,18 @@
 % We have used an authorization to specify them and this is interesting
 
 Employees bring their personal devices to work.
-This is a challenge for corporate IT departments:
+Corporate IT departments can find this challenging:
   they want to secure their networks but have limited control over a personal device's software and configuration.
 To ensure compliance IT departments publish mobile device policies.
 Employees must agree to follow them if they want to use their personal devices at work.
-Many policies are specified using natural language which may be ambiguous and hard to check for compliance.
+Policies specified using natural language can contain ambiguities.
+This makes compliance checking hard as automatic methods are hard to use with these policies.
 
-Logics of authorization are languages to express what actions are permissible.
-Amongst other applicaitons they have been used in access control~\cite{Abadi:2003kta}, and to identify problems in electronic health records~\cite{Becker:2004fi}.
-\emph{AppPAL}~\cite{Hallett:2016vu} is an instantiation of Becker~et~al{.}'s SecPAL~\cite{Becker:2006vh} language that expresses mobile app installation policies.
+Logics of authorization are languages used to express permissible actions.
+Their uses include access control~\cite{Abadi:2003kta}, and identifying problems in electronic health records~\cite{Becker:2004fi}, amongst other applications.
+\emph{AppPAL}~\cite{Hallett:2016vu} instantiates Becker~et~al{.}'s SecPAL~\cite{Becker:2006vh} language to express mobile app installation policies.
 It makes use of delegation relationships and uses external constraints to formalise policies.
+We believe it has applications to mobile device BYOD policies as well.
 
 We present excerpts from an AppPAL translation of three BYOD policies: 
     one a security policy from the SANS institute to aid companies in developing their own rules~\cite{Guerin:2008we}, 
@@ -72,13 +74,14 @@ We show how AppPAL can specifiy BYOD policies making them precise, identifying p
 \section{Translating Corporate BYOD Policies}
 \label{sec:translation}
 
-Many BYOD policies describe what apps are usable at work.
-The Edinburgh policy recommends that apps come from a reputable source (though what it means to be \emph{reputable} is left undefined). 
-The SANS policy uses white and black lists of apps written by the IT department, however, the rule is repeated later in their document by another equivalent rule.
+Many BYOD policies describe the apps usable in the workplace.
+The Edinburgh policy recommends apps come from reputable sources (though the meaning of \emph{reputable} is left undefined). 
+The SANS policy uses app black and white lists written by the IT department.
+Infact the SANS policy recommends this multiple times in their document.
 \begin{lstlisting}[title={\footnotesize\textbf{Edinburgh}:~\itshape ``Only download applications (‘apps’) or other software from reputable sources.''}]
 'edinburgh-policy' says Store can-say App isInstallable if Store sells(App), Store isReputable.
 \end{lstlisting}
-\begin{lstlisting}[title={\footnotesize\textbf{SANS}:~\itshape ``The IT Department maintains a list of allowed and unauthorzed applications and makes them available to users on the intranet.''}]
+\begin{lstlisting}[title={\footnotesize\textbf{SANS}:~\itshape ``The IT Department maintains a list of allowed and unauthorized applications and makes them available to users on the intranet.''}]
 'sans-policy' says 'it-department' can-say App isInstallable.
 \end{lstlisting}
 \begin{lstlisting}[title={\footnotesize\textbf{SANS}:~\itshape ``Only approved third party applications can be
@@ -87,9 +90,9 @@ obtained by contacting the IT department, or should be
 available on the intranet.''}]
 'sans-policy' says 'it-department' can-say App isInstallable.
 \end{lstlisting}
-The NHS policy makes a distinction between \emph{clinical} and \emph{non-clinical} apps;
-    with each requiring approval through a different group before final approval is given by a commitee.
-In practice these rules are irrelevant, however, as no group has ever approved an app.
+The NHS policy distinguishes between \emph{clinical} and \emph{non-clinical} apps;
+    with both requiring approval through a different group before a committee gives final approval.
+In practice these rules are irrelevant: no group has ever approved an app.
 \begin{lstlisting}[title={\footnotesize\textbf{NHS}:~\itshape ``%
 Apps for work usage must not be downloaded onto corporately issued mobile devices (even if approved on the NHS apps store) unless they have been approved through the following Trust channels: 
     Clinical apps;
@@ -107,9 +110,9 @@ Following approval through Care and Clinical Policies and / or MIG, final approv
 'nhs-policy' says 'igc' can-say App isFinallyApproved.
 \end{lstlisting}
 
-In all three policies delegation was used to decide whether an employee could install an app.
-By translating the policies into AppPAL problems become apparent: the Edinburgh policy is \emph{incomplete} as there was no way to determine what stores were reputable, the SANS policy \emph{contains duplicated rules}, and the NHS policy is \emph{redundant} as no app was ever been approved for use. 
-In each case the AppPAL rule was no longer than the natural language policy, and in the case of the NHS policy considerably shorter and clearer.
+All three policies use delegation to decide is an app is installable.
+By translating the policies into AppPAL problems become apparent: the Edinburgh policy is \emph{incomplete} as it lacks a means to determine what stores were reputable, the SANS policy \emph{contains duplicated rules}, and the NHS policy is \emph{redundant} as no app was ever approved for use. 
+For all three policies the AppPAL rule is no longer than the natural language policy, and in the case of the NHS policy considerably shorter and clearer.
 
 Some rules appear in different policies with minor changes.
 Both the NHS and SANS policies regulate the use of mobile devices in cars: by banning the use whilst driving.
@@ -134,7 +137,7 @@ When specified in AppPAL the similarities are immediately apparent: the SANS ver
 
 Other similarities appear when looking at how devices connect to networks.
 The Edinburgh policy recommends disabling automatic access to open unsecured Wi-Fi networks (though again it does not specify what \emph{secure} actually means). 
-In contrast, the SANS policy says what security features are required and that, whilst secured access points are preferred, an open access point may be used with a VPN.
+In contrast, the SANS policy says what security features are required and that, whilst secure access points are preferred, an open access point is acceptable if used with a VPN.
 \begin{lstlisting}[title={\footnotesize\textbf{Edinburgh}:~\itshape ``Control your devices connections by disabling automatic connection to open, unsecured Wi-Fi networks.''}]
 'edinburgh-policy' says Device canConnectTo(AP) if AP isSecure.
 \end{lstlisting}
@@ -151,7 +154,7 @@ AppPAL can describe complex scenarios in policies.
 The NHS policy describes when a clinician can use their phone's camera as part of patient care.
 The rules require obtaining consent (delegation to the patient) as well as clinical approval (delegation to the clinician). 
 As well as helping clarify the policy, the AppPAL rules can aid with compliance:
-    a proof the AppPAL policy was satisfied might act as evidence that proper procedure was followed.
+    a proof an AppPAL policy was satisfied might act as evidence that proper procedure was followed.
 \begin{lstlisting}[title={\footnotesize\textbf{NHS}:~\itshape ``%
 Some mobile devices have the ability to take photographs / videos. 
 This function should not be used for photographs / videos of an individual’s care and treatment unless the device has encryption enabled and it is clinically appropriate to do so.
@@ -180,8 +183,7 @@ A record of the consent must be entered into the individual’s care record.
 We have shown that natural language BYOD policies contain ambiguities and mistakes.
 We have also shown how an authorization language, such as AppPAL, might help improve the policies by removing ambiguity, aiding comparison, making delegation relationships explicit and demonstrating compliance.
 Future work will look in detail at the implementation of a BYOD policy using AppPAL, any problems identified, and the degree to which the policy can be enforced automatically.
-Automatically inferring when AppPAL policies are incomplete, inconsistent, or have issues with redundancy would help policy designers avoid problems.
-
+Automatic inference of when an AppPAL policies is incomplete, inconsistent, or has issues with redundancy would help policy designers avoid problems.
 
 \bibliographystyle{plain}
 \begin{thebibliography}{1}
