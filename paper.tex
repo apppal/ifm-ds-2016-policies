@@ -28,7 +28,10 @@
   keywordstyle=\ttfamily\slshape\footnotesize{},
   language=AppPAL,
   columns=flexible,
-  frame=single
+  frame=single,
+  framesep=0.5pt,
+  framexleftmargin=2.5pt,
+  framexrightmargin=2.5pt,
 }
 
 \newcommand{\dotdotdot}[1]{$[\cdots]$}
@@ -98,19 +101,19 @@ available on the intranet.''}]
 The NHS policy distinguishes between \emph{clinical} and \emph{non-clinical} apps;
     with both requiring approval through a different group before a committee gives final approval.
 In practice these rules are irrelevant: no group has ever approved an app. 
-This is, perhaps, unsurprising as 82\% of Android medical apps have basic privacy concerns~\cite{Blenner:2016ja}.
+This is, perhaps, unsurprising as 82\% of Android medical apps have basic privacy concerns~\cite{Blenner:2016ja,Knorr:2015st}.
 
 \begin{lstlisting}[title={\footnotesize\textbf{NHS}:~\itshape ``%
 Apps for work usage must not be downloaded onto corporately issued mobile devices (even if approved on the NHS apps store) unless they have been approved through the following Trust channels: 
     Clinical apps;
-        at the time of writing there are no apps clinically approved by the Trust for use with patients / clients. 
-        However, if a member of staff believes that there are clinical apps \dotdotdot{or other technologies that could benefit their patients / clients, this should be discussed with the clinical lead in the first instance and} ratification should be sought via the Care and Clinical Policies Group. 
+        at the time of writing there are no apps clinically approved by the Trust for use with patients/clients. 
+        However, if a member of staff believes that there are clinical apps \dotdotdot{or other technologies that could benefit their patients/clients, this should be discussed with the clinical lead in the first instance and} ratification should be sought via the Care and Clinical Policies Group. 
         \dotdotdot{A clinical app should not be used if it has not been approved via this group.}
     Business apps; 
         at the time of writing there are no business (i.e., non-clinical) apps approved by the Trust for use other than those preloaded onto the device at the point of issue. 
         However, if a member of staff believes that there are apps \dotdotdot{or other technologies that could benefit their non-clinical work,} ratification of the app must be sought via the Management of Information Group (MIG). 
         \dotdotdot{An app should not be used if it has not been approved via this group.}
-Following approval through Care and Clinical Policies and / or MIG, final approval will be required through Integrated Governance Committee.''}]
+Following approval through Care and Clinical Policies and/or MIG, final approval will be required through Integrated Governance Committee.''}]
 'nhs-policy' says App isInstallable if App isUsable, App isFinallyApproved.
 'nhs-policy' says 'cacpg' can-say App isUsable if App isUsableClinically.
 'nhs-policy' says 'mig' can-say App isUsable if App isUsableNonClinically.
@@ -162,12 +165,11 @@ The NHS policy describes when a clinician can use their phone's camera as part o
 The rules require obtaining consent (delegation to the patient) as well as clinical approval (delegation to the clinician). 
 As well as helping clarify the policy, the AppPAL rules can aid with compliance---a proof an AppPAL policy was satisfied might act as evidence that proper procedure was followed.
 \begin{lstlisting}[title={\footnotesize\textbf{NHS}:~\itshape ``%
-Some mobile devices have the ability to take photographs / videos. 
-This function should not be used for photographs / videos of an individual’s care and treatment unless the device has encryption enabled and it is clinically appropriate to do so.
-If the photography / video facility is used as part of the recording of an individual’s care and treatment, the device user must ensure that the consent of the individual has been collected prior to taking any photograph / video. 
-\dotdotdot{The individual needs to fully understand why the photograph / video is being taken and the member of staff plans to do with it, in particular if it will be shared. }
-A record of the consent must be entered into the individual’s care record. 
-''}]
+Some mobile devices have the ability to take photographs/videos. 
+This function should not be used for photographs/videos of an individual’s care and treatment unless the device has encryption enabled and it is clinically appropriate to do so.
+If the photography/video facility is used as part of the recording of an individual’s care and treatment, the device user must ensure that the consent of the individual has been collected prior to taking any photograph/video. 
+\dotdotdot{The individual needs to fully understand why the photograph/video is being taken and the member of staff plans to do with it, in particular if it will be shared. }
+A record of the consent must be entered into the individual’s care record.''}]
 'nhs-policy' says Device canPhotograph(Patient) if Device isEncrypted, Patient canBePhotographed.
 'nhs-policy' says 'clinician' can-say Patient canBePhotographed
   if Patient hasClinicalNeedForPhotograph, Patient hasConsentedToPhotograph
@@ -192,16 +194,15 @@ For example, when checking the \emph{isInstallable} predicate in the NHS policy 
 \begin{lstlisting}
 The following assertions are unsatisfiable:
   'nhs-policy' says App.1 isInstallable if App.1 isUsable, App.1 isFinallyApproved.
-
 These decisions may be derivable but we lack statements from the delegated party:
   (via 'mig') 'nhs-policy' says * isUsable
   (via 'igc') 'nhs-policy' says * isFinallyApproved
   (via 'cacpg') 'nhs-policy' says * isUsable
 \end{lstlisting}
 As the BYOD policies are informal we should question the accuracy of our formalisation.
-Future work will look at developing a testing process as part of the requirements capture, and working with policy owners to check that rules AppPAL postulates as true match the author's intentions.
+Future work will look at developing a testing process as part of the requirements capture, and working with policy owners to check that rules AppPAL postulates as true indeed match the author's intentions.
 In general, BYOD policies are at an early stage.
-As policies grow and become more intricate tools like AppPAL can help ensure they are well specified.
+As policies grow and become more intricate, we believe that tools like AppPAL will help ensure they are well specified.
 
 \bibliographystyle{plain}
 \begin{thebibliography}{1}
@@ -244,5 +245,10 @@ S.R. Blenner, et~al.
 M.Y. Becker, and P. Sewell,
 \newblock {Cassandra: flexible trust management, applied to electronic health records},
 \newblock {\em Computer Security Foundations}, 2004.
+
+\bibitem{Knorr:2015st}
+K. Knorr, and D. Aspinall.
+\newblock {Security Testing for Android mHealth Apps}
+\newblock {\em Software Testing, Verification and Validation Workshops}, 2015.
 \end{thebibliography}
 \end{document}
