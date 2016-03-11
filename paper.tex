@@ -1,8 +1,8 @@
 \documentclass{easychair}
 \usepackage{microtype}
 
-\title{Specifying BYOD Policies With Authorization Logic}
-\titlerunning{Specifying BYOD Policies With Authorization Logic}
+\title{Specifying BYOD Policies With Authorisation Logic}
+\titlerunning{Specifying BYOD Policies With Authorisation Logic}
 \author{
   Joseph Hallett%\inst{1}
   \and
@@ -42,10 +42,10 @@
   % Why is it interesting
   This creates ambiguity, may hide specification problems and make comparison harder.
   % What does my solution achieve
-  We show how we can use AppPAL (an authorization logic) to formalise three BYOD policies.
+  We show how we can use AppPAL (an authorisation logic) to formalise three BYOD policies.
   % What follows from solution
   We identify potential problems in all three policies.
-  This suggests authorization logic may help in policy specification and enforcement.
+  This suggests authorisation logic may help in policy specification and enforcement.
 \end{abstract}
 
 \section{Introduction}
@@ -60,7 +60,7 @@ Employees must agree to follow them if they want to use their personal devices a
 Policies specified using natural language can contain ambiguities.
 This makes compliance checking hard as automatic methods are hard to use with these policies.
 
-Logics of authorization are languages used to express permissible actions.
+Logics of authorisation are languages used to express permissible actions.
 Their uses include access control~\cite{Abadi:2003kta}, and identifying problems in electronic health records~\cite{Becker:2004fi}, amongst other applications.
 \emph{AppPAL}~\cite{Hallett:2016vu} instantiates Becker~et~al{.}'s SecPAL~\cite{Becker:2006vh} language to express mobile app installation policies.
 It makes use of delegation relationships and uses external constraints to formalise policies.
@@ -73,7 +73,7 @@ It is designed to be readable; we introduce the language alongside the BYOD exam
     a security policy from the SANS institute to aid companies in developing their own rules~\cite{Guerin:2008we}, 
     an NHS hospital trust~\cite{Kennington:2014tr},
     and a policy used at The University of Edinburgh~\cite{Williamson:2015tr}.
-We show how AppPAL can specifiy BYOD policies making them precise, identifying problems and aiding comparison.
+We show how AppPAL can specify BYOD policies making them precise, identifying problems and aiding comparison.
 
 \section{Translating Corporate BYOD Policies}
 \label{sec:translation}
@@ -81,11 +81,11 @@ We show how AppPAL can specifiy BYOD policies making them precise, identifying p
 Many BYOD policies describe the apps usable in the workplace.
 The Edinburgh policy recommends apps come from reputable sources (though the meaning of \emph{reputable} is left undefined). 
 The SANS policy uses app black and white lists written by the IT department.
-Infact the SANS policy recommends this multiple times in their document.
+In fact the SANS policy recommends this multiple times in their document.
 \begin{lstlisting}[title={\footnotesize\textbf{Edinburgh}:~\itshape ``Only download applications (‘apps’) or other software from reputable sources.''}]
 'edinburgh-policy' says Store can-say App isInstallable if Store sells(App), Store isReputable.
 \end{lstlisting}
-\begin{lstlisting}[title={\footnotesize\textbf{SANS}:~\itshape ``The IT Department maintains a list of allowed and unauthorized applications and makes them available to users on the intranet.''}]
+\begin{lstlisting}[title={\footnotesize\textbf{SANS}:~\itshape ``The IT Department maintains a list of allowed and unauthorised applications and makes them available to users on the intranet.''}]
 'sans-policy' says 'it-department' can-say App isInstallable.
 \end{lstlisting}
 \begin{lstlisting}[title={\footnotesize\textbf{SANS}:~\itshape ``Only approved third party applications can be
