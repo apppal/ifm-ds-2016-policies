@@ -96,7 +96,8 @@ available on the intranet.''}]
 \end{lstlisting}
 The NHS policy distinguishes between \emph{clinical} and \emph{non-clinical} apps;
     with both requiring approval through a different group before a committee gives final approval.
-In practice these rules are irrelevant: no group has ever approved an app.
+In practice these rules are irrelevant: no group has ever approved an app: perhaps unsurprisingly since 82\% of Android medical apps have basic privacy concerns~\cite{Blenner:2016ja}.
+
 \begin{lstlisting}[title={\footnotesize\textbf{NHS}:~\itshape ``%
 Apps for work usage must not be downloaded onto corporately issued mobile devices (even if approved on the NHS apps store) unless they have been approved through the following Trust channels: 
     Clinical apps;
@@ -196,9 +197,8 @@ These decisions may be derivable but we lack statements from the delegated party
   (via 'igc') 'nhs-policy' says * isFinallyApproved
   (via 'cacpg') 'nhs-policy' says * isUsable
 \end{lstlisting}
-Since the policies we are translating are informal, we should also question the accuracy of our formalisation.
+Since the BYOD policies are informal we should question the accuracy of our formalisation.
 Future work will look at developing a testing process as part of the requirements capture, and working with policy owners to check that rules AppPAL postulates as true match the author's intentions.
-
 In general, BYOD policies are at an early stage.
 As policies grow and become more intricate tools like AppPAL might help ensure they are well specified.
 
@@ -231,8 +231,13 @@ D. Williamson, A. Grzybowski, and S. Graham.
 
 \bibitem{Abadi:2003kta}
 M. Abadi.
-\`newblock {Logic in access control},
+\newblock {Logic in access control},
 \newblock {\em Logic in Computer Science}, 2003.
+
+\bibitem{Blenner:2016ja}
+S.R. Blenner, et~al.
+\newblock {Privacy Policies of Android Diabetes Apps and Sharing of Health Information}
+\newblock {\em Journal of the American Medical Association}, 2016.
 
 \bibitem{Becker:2004fi}
 M.Y. Becker, and P. Sewell,
