@@ -4,9 +4,9 @@
 \title{Specifying BYOD Policies With Authorization Logic}
 \titlerunning{Specifying BYOD Policies With Authorization Logic}
 \author{
-  Joseph Hallett\inst{1}
+  Joseph Hallett%\inst{1}
   \and
-  David Aspinall\inst{1}
+  David Aspinall%\inst{1}
 }
 \authorrunning{Hallett and Aspinall}
 
@@ -42,9 +42,10 @@
   % Why is it interesting
   This creates ambiguity, may hide specification problems and make comparison harder.
   % What does my solution achieve
-  We show how we can use AppPAL (an authorization logic) to formalise BYOD policies.
+  We show how we can use AppPAL (an authorization logic) to formalise three BYOD policies.
   % What follows from solution
-  This suggests we can automatically enforce policies with fewer mistakes than by relying on users.
+  We identify potential problems in all three policies.
+  This suggests authorization logic may help in policy specification and enforcement.
 \end{abstract}
 
 \section{Introduction}
@@ -63,12 +64,15 @@ Logics of authorization are languages used to express permissible actions.
 Their uses include access control~\cite{Abadi:2003kta}, and identifying problems in electronic health records~\cite{Becker:2004fi}, amongst other applications.
 \emph{AppPAL}~\cite{Hallett:2016vu} instantiates Becker~et~al{.}'s SecPAL~\cite{Becker:2006vh} language to express mobile app installation policies.
 It makes use of delegation relationships and uses external constraints to formalise policies.
+AppPAL policies define predicates which can affect application installation (isInstallable) or operation;
+ they may be enforced by application rewriting or a modified version of the mobile platform security manager.
 We believe it has applications to mobile device BYOD policies as well.
 
-We present excerpts from an AppPAL translation of three BYOD policies: 
-    one a security policy from the SANS institute to aid companies in developing their own rules~\cite{Guerin:2008we}, 
-    one from an NHS hospital trust~\cite{Kennington:2014tr},
-    and a BYOD policy used at The University of Edinburgh~\cite{Williamson:2015tr}.
+We present excerpts from an AppPAL translation of three BYOD policies. 
+It is designed to be readable; we introduce the language alongside the BYOD example excerpts from:
+    a security policy from the SANS institute to aid companies in developing their own rules~\cite{Guerin:2008we}, 
+    an NHS hospital trust~\cite{Kennington:2014tr},
+    and a policy used at The University of Edinburgh~\cite{Williamson:2015tr}.
 We show how AppPAL can specifiy BYOD policies making them precise, identifying problems and aiding comparison.
 
 \section{Translating Corporate BYOD Policies}
@@ -114,28 +118,28 @@ All three policies use delegation to decide is an app is installable.
 By translating the policies into AppPAL problems become apparent: the Edinburgh policy is \emph{incomplete} as it lacks a means to determine what stores were reputable, the SANS policy \emph{contains duplicated rules}, and the NHS policy is \emph{redundant} as no app was ever approved for use. 
 For all three policies the AppPAL rule is no longer than the natural language policy, and in the case of the NHS policy considerably shorter and clearer.
 
-Some rules appear in different policies with minor changes.
-Both the NHS and SANS policies regulate the use of mobile devices in cars: by banning the use whilst driving.
-The SANS policy permits the use of hands-free devices, whereas the NHS policy recommends against them.
-\begin{lstlisting}[title={\footnotesize\textbf{SANS}:~\itshape ``%
-Conducting telephone calls or utilizing handhelds while driving can be a safety hazard.
-Drivers should use handhelds in hand only while parked or out of the vehicle.
-If employees must use a handheld device while driving, \emph{Company} requires the use of hands-free headset devices.''}]
-'sans-policy' says Device mustNotOperate if Device isOwnedBy(Owner)
-  where inCar(Device) = true, isDriving(Owner) = true, isUsingHandsFree(Device) = false.
-\end{lstlisting}
-\begin{lstlisting}[title={\footnotesize\textbf{NHS}:~\itshape ``%
-For safety reasons, Trust staff must not use a hand held mobile device whilst driving any vehicle.
-\dotdotdot{It is illegal to do so. 
-Please refer to the most up-to-date information via the Highways Agency.}
-the Trust does not recommend using mobile devices in hands-free mode \dotdotdot{or with hands-free attachments} whilst driving.
-''}]
-'nhs-policy' says Device mustNotOperate if Device isOwnedBy(Owner)
-  where inCar(Device) = true, isDriving(Owner) = true.
-\end{lstlisting}
-When specified in AppPAL the similarities are immediately apparent: the SANS version has an additional constraint but they are otherwise identical.
+%Some rules appear in different policies with minor changes.
+%Both the NHS and SANS policies regulate the use of mobile devices in cars: by banning the use whilst driving.
+%The SANS policy permits the use of hands-free devices, whereas the NHS policy recommends against them.
+%\begin{lstlisting}[title={\footnotesize\textbf{SANS}:~\itshape ``%
+%Conducting telephone calls or utilizing handhelds while driving can be a safety hazard.
+%Drivers should use handhelds in hand only while parked or out of the vehicle.
+%If employees must use a handheld device while driving, \emph{Company} requires the use of hands-free headset devices.''}]
+%'sans-policy' says Device mustNotOperate if Device isOwnedBy(Owner)
+%  where inCar(Device) = true, isDriving(Owner) = true, isUsingHandsFree(Device) = false.
+%\end{lstlisting}
+%\begin{lstlisting}[title={\footnotesize\textbf{NHS}:~\itshape ``%
+%For safety reasons, Trust staff must not use a hand held mobile device whilst driving any vehicle.
+%\dotdotdot{It is illegal to do so. 
+%Please refer to the most up-to-date information via the Highways Agency.}
+%the Trust does not recommend using mobile devices in hands-free mode \dotdotdot{or with hands-free attachments} whilst driving.
+%''}]
+%'nhs-policy' says Device mustNotOperate if Device isOwnedBy(Owner)
+%  where inCar(Device) = true, isDriving(Owner) = true.
+%\end{lstlisting}
+%When specified in AppPAL the similarities are immediately apparent: the SANS version has an additional constraint but they are otherwise identical.
 
-Other similarities appear when looking at how devices connect to networks.
+Similarities appear when looking at how devices connect to networks.
 The Edinburgh policy recommends disabling automatic access to open unsecured Wi-Fi networks (though again it does not specify what \emph{secure} actually means). 
 In contrast, the SANS policy says what security features are required and that, whilst secure access points are preferred, an open access point is acceptable if used with a VPN.
 \begin{lstlisting}[title={\footnotesize\textbf{Edinburgh}:~\itshape ``Control your devices connections by disabling automatic connection to open, unsecured Wi-Fi networks.''}]
@@ -170,7 +174,7 @@ A record of the consent must be entered into the individual’s care record.
 'nhs-policy' says Patient can-say Patient hasConsentedToPhotograph if Patient canConsent.
 \end{lstlisting}
 
-\section{Conclusions and Future Work}
+\section{Current Status}
 % Related work:
 %   Existing systems for enforcement (mobile iron)
 %   Other work translating policies into formal language
@@ -180,10 +184,23 @@ A record of the consent must be entered into the individual’s care record.
 %   Natural language policies don't work
 %   Formal specification helpful.
 
-We have shown that natural language BYOD policies contain ambiguities and mistakes.
-We have also shown how an authorization language, such as AppPAL, might help improve the policies by removing ambiguity, aiding comparison, making delegation relationships explicit and demonstrating compliance.
-Future work will look in detail at the implementation of a BYOD policy using AppPAL, any problems identified, and the degree to which the policy can be enforced automatically.
-Automatic inference of when an AppPAL policies is incomplete, inconsistent, or has issues with redundancy would help policy designers avoid problems.
+So far we have developed AppPAL policies describing each of the BYOD policies.
+We have developed tools to identify when AppPAL policies may be incomplete, and aim to extend this to inconsistency and redundancy checks in future work.
+For example, when checking the \emph{isInstallable} predicate in the NHS policy our completeness checker spots the missing statements from the groups, and that the \emph{isInstallable} rule is unsatisfiable.
+\begin{lstlisting}
+The following assertions are unsatisfiable:
+  'nhs-policy' says App.1 isInstallable if App.1 isUsable, App.1 isFinallyApproved.
+
+These decisions may be derivable but we lack statements from the delegated party:
+  (via 'mig') 'nhs-policy' says * isUsable
+  (via 'igc') 'nhs-policy' says * isFinallyApproved
+  (via 'cacpg') 'nhs-policy' says * isUsable
+\end{lstlisting}
+Since the policies we are translating are informal, we should also question the accuracy of our formalisation.
+Future work will look at developing a testing process as part of the requirements capture, and working with policy owners to check that rules AppPAL postulates as true match the author's intentions.
+
+In general, BYOD policies are at an early stage.
+As policies grow and become more intricate tools like AppPAL might help ensure they are well specified.
 
 \bibliographystyle{plain}
 \begin{thebibliography}{1}
